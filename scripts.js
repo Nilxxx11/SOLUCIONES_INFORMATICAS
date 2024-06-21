@@ -1,11 +1,12 @@
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCfJiBkzwaLdoSpQDHU3rCgfC4nMr58hUk",
+  authDomain: "paginaweb-d1886.firebaseapp.com",
+  projectId: "paginaweb-d1886",
+  storageBucket: "paginaweb-d1886.appspot.com",
+  messagingSenderId: "430619803153",
+  appId: "1:430619803153:web:1fbada3c7fb6ca45a07bb0",
+  measurementId: "G-BYJ5RVSZ92"
 };
 
 // Initialize Firebase
