@@ -10,98 +10,62 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-document.addEventListener('DOMContentLoaded', () => {
-    if (document.getElementById('commentForm')) {
-        const commentForm = document.getElementById('commentForm');
-        const commentSection = document.getElementById('commentSection');
-        
-        commentForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const name = document.getElementById('name').value;
-            const comment = document.getElementById('comment').value;
-
-            if (name && comment) {
-                db.collection('comments').add({
-                    name: name,
-                    comment: comment,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    displayComment(name, comment);
-                    commentForm.reset();
-                    showNotification('Comentario agregado con éxito', 'success');
-                }).catch((error) => {
-                    console.error("Error adding comment: ", error);
-                    showNotification('Error al agregar comentario', 'danger');
-                });
-            } else {
-                showNotification('Por favor, complete todos los campos', 'warning');
-            }
+// Function to add a tutorial
+async function addTutorial(title, content) {
+    try {
+        await db.collection('tutorials').add({
+            title: title,
+            content: content,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
-
-        // Load comments from Firestore
-        db.collection('comments').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
-            commentSection.innerHTML = '';
-            snapshot.forEach((doc) => {
-                displayComment(doc.data().name, doc.data().comment);
-            });
-        });
+        alert("Tutorial added successfully!");
+    } catch (error) {
+        console.error("Error adding tutorial: ", error);
+        alert("Failed to add tutorial: " + error.message);
     }
+}
 
-    if (document.getElementById('solutionsList')) {
-        loadSolutions();
-    }
-});
-
-function loadSolutions() {
-    db.collection('solutions').get().then((snapshot) => {
-        const solutionsList = document.getElementById('solutionsList');
-        solutionsList.innerHTML = '';
-        snapshot.forEach((doc) => {
-            displaySolution(doc.id, doc.data().title, doc.data().description, doc.data().details);
+// Function to fetch tutorials
+async function fetchTutorials() {
+    try {
+        const snapshot = await db.collection('tutorials').orderBy('timestamp', 'desc').get();
+        snapshot.forEach(doc => {
+            console.log(doc.id, " => ", doc.data());
+            // Append data to the UI
         });
-    }).catch((error) => {
-        console.error("Error loading solutions: ", error);
-    });
+    } catch (error) {
+        console.error("Error fetching tutorials: ", error);
+        alert("Failed to fetch tutorials: " + error.message);
+    }
 }
 
-function displaySolution(id, title, description, details) {
-    const article = document.createElement('article');
-    article.className = 'box';
-    article.innerHTML = `
-        <h3 class="title is-4">${title}</h3>
-        <p>${description}</p>
-        <button class="button is-link is-light" onclick="toggleSolutionDetails('${id}')">Ver más</button>
-        <div id="${id}" class="solution-details" style="display: none;">
-            <p>${details}</p>
-        </div>
-    `;
-    document.getElementById('solutionsList').appendChild(article);
+// Function to add a comment
+async function addComment(tutorialId, comment) {
+    try {
+        await db.collection('tutorials').doc(tutorialId).collection('comments').add({
+            comment: comment,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        alert("Comment added successfully!");
+    } catch (error) {
+        console.error("Error adding comment: ", error);
+        alert("Failed to add comment: " + error.message);
+    }
 }
 
-function displayComment(name, comment) {
-    const commentElement = document.createElement('div');
-    commentElement.className = 'box';
-    commentElement.innerHTML = `
-        <p><strong>${name}:</strong> ${comment}</p>
-    `;
-    document.getElementById('commentSection').appendChild(commentElement);
-}
-
-function toggleSolutionDetails(id) {
-    const element = document.getElementById(id);
-    element.style.display = element.style.display === 'none' || element.style.display === '' ? 'block' : 'none';
-}
-
-function showNotification(message, type) {
-    const notification = document.createElement('div');
-    notification.className = `notification is-${type}`;
-    notification.innerText = message;
-    document.body.appendChild(notification);
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
+// Function to fetch comments for a tutorial
+async function fetchComments(tutorialId) {
+    try {
+        const snapshot = await db.collection('tutorials').doc(tutorialId).collection('comments').orderBy('timestamp', 'desc').get();
+        snapshot.forEach(doc => {
+            console.log(doc.id, " => ", doc.data());
+            // Append data to the UI
+        });
+    } catch (error) {
+        console.error("Error fetching comments: ", error);
+        alert("Failed to fetch comments: " + error.message);
+    }
 }
