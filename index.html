@@ -6,27 +6,38 @@
     <title>Página Principal - Soluciones Informáticas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
     <link rel="stylesheet" href="styles.css">
+    <!-- Código de AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-XXXXXXXXXXXXXXXX",
+        enable_page_level_ads: true
+      });
+    </script>
 </head>
 <body>
     <section class="section">
         <div class="container">
-                        <!-- navbar.html -->
-        <div class="navbar-start">
-            <a class="navbar-item" href="index.html">Inicio</a>
-            <a class="navbar-item" href="solutions.html">Soluciones</a>
-            <a class="navbar-item" href="comments.html">Comentarios</a>
-            <a class="navbar-item" href="contact.html">Contacto</a>
-        </div>
             <header class="has-text-centered">
                 <h1 class="title">Soluciones Informáticas</h1>
-                <!-- Incluimos la barra de navegación -->
-              
+                <!-- Barra de navegación -->
+                <nav class="navbar is-spaced">
+                    <div class="navbar-menu">
+                        <div class="navbar-start">
+                            <a class="navbar-item" href="index.html">Inicio</a>
+                            <a class="navbar-item" href="solutions.html">Soluciones</a>
+                            <a class="navbar-item" href="comments.html">Comentarios</a>
+                            <a class="navbar-item" href="contact.html">Contacto</a>
+                        </div>
+                    </div>
+                </nav>
             </header>
 
             <main>
                 <section id="home" class="section">
                     <h2 class="title">Bienvenidos a Soluciones Informáticas</h2>
                     <p class="content">Encuentra soluciones a tus problemas técnicos y comparte tus conocimientos con la comunidad. Explora nuestras secciones para más detalles.</p>
+                    <div id="error-message" class="notification is-danger is-hidden"></div>
                 </section>
             </main>
         </div>
@@ -37,5 +48,20 @@
             <p>&copy; 2024 Soluciones Informáticas</p>
         </div>
     </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/9.11.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.11.0/firebase-firestore.js"></script>
+    <script src="scripts.js"></script>
+    <script>
+      // Example error handling
+      function showError(message) {
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.textContent = message;
+        errorMessage.classList.remove('is-hidden');
+      }
+
+      // Example usage
+      fetchTutorials().catch(error => showError(error.message));
+    </script>
 </body>
 </html>
